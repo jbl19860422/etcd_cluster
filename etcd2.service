@@ -1,0 +1,21 @@
+[Unit]
+Description=etcd
+Documentation=https://github.com/coreos/etcd
+Conflicts=etcd.service
+[Service]
+Type=notify
+Restart=always
+RestartSec=5s
+LimitNOFILE=40000
+TimeoutStartSec=0
+ExecStart=/usr/bin/etcd --name etcd2 \
+  --data-dir /data/etcd \
+  --initial-advertise-peer-urls http://192.168.43.133:4380 \
+  --listen-peer-urls http://192.168.43.133:4380 \
+  --listen-client-urls http://192.168.43.133:4379,http://127.0.0.1:4379 \
+  --advertise-client-urls http://192.168.43.133:4379 \
+  --initial-cluster-token etcd-cluster-pro \
+  --initial-cluster etcd0=http://192.168.43.133:2380,etcd1=http://192.168.43.133:3380,etcd2=http://192.168.43.133:4380 \
+  --initial-cluster-state new
+[Install]
+WantedBy=multi-user.target
